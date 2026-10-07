@@ -2,272 +2,194 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#080d20">
-<title>Free Fire Like</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FREE FIRE LIKE</title>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{color-scheme:dark}
-body{
-    min-height:100vh;
-    font-family:Arial,Helvetica,sans-serif;
-    background:
-        radial-gradient(circle at top,#17244d 0,#0a1025 42%,#050914 100%);
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+* {
+    box-sizing: border-box;
 }
-.card{
-    width:100%;
-    max-width:430px;
-    min-height:560px;
-    padding:28px 20px 22px;
-    background:rgba(17,24,45,.96);
-    border:1px solid rgba(255,255,255,.13);
-    border-radius:24px;
-    box-shadow:0 20px 60px rgba(0,0,0,.55);
-    display:flex;
-    flex-direction:column;
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: #10151c;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.header{text-align:center;margin-bottom:28px}
-.header h1{
-    font-size:clamp(27px,8vw,34px);
-    color:#00e5ff;
-    margin-bottom:8px;
-    letter-spacing:.2px;
+
+.card {
+    width: 92%;
+    max-width: 430px;
+    padding: 25px;
+    border-radius: 18px;
+    background: #1d2632;
+    box-shadow: 0 10px 30px rgba(0,0,0,.4);
 }
-.header p{color:#aeb7d2;font-size:14px}
-.group{margin-bottom:17px}
-label{
-    display:block;
-    color:#dce3ff;
-    font-size:15px;
-    margin-bottom:9px;
+
+h1 {
+    margin: 0 0 8px;
+    text-align: center;
 }
-input,select{
-    width:100%;
-    min-height:54px;
-    padding:14px 15px;
-    border-radius:13px;
-    border:1px solid #394363;
-    background:#090f22;
-    color:#fff;
-    outline:none;
-    font-size:16px;
+
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 25px;
 }
-input::placeholder{color:#697391}
-input:focus,select:focus{
-    border-color:#00e5ff;
-    box-shadow:0 0 0 2px rgba(0,229,255,.09);
+
+label {
+    display: block;
+    margin: 12px 0 7px;
+    font-weight: bold;
 }
-button{
-    width:100%;
-    min-height:54px;
-    padding:14px;
-    border:0;
-    border-radius:13px;
-    background:linear-gradient(90deg,#00c6ff,#0072ff);
-    color:#fff;
-    font-size:17px;
-    font-weight:700;
-    cursor:pointer;
-    box-shadow:0 8px 22px rgba(0,114,255,.22);
-    transition:transform .15s,opacity .15s;
+
+input,
+select {
+    width: 100%;
+    padding: 14px;
+    border: 0;
+    border-radius: 10px;
+    background: #303b47;
+    color: white;
+    font-size: 16px;
+    outline: none;
 }
-button:active{transform:scale(.985)}
-button:disabled{opacity:.62;cursor:not-allowed}
-#result{
-    margin-top:22px;
-    padding:16px;
-    min-height:66px;
-    background:#080e20;
-    border:1px solid #252d49;
-    border-radius:13px;
-    font-size:14px;
-    line-height:1.7;
-    word-break:break-word;
+
+button {
+    width: 100%;
+    margin-top: 20px;
+    padding: 15px;
+    border: 0;
+    border-radius: 10px;
+    background: #69d66b;
+    color: #10151c;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
 }
-.success{color:#55ff9a}
-.error{color:#ff6b6b}
-.loading{color:#ffd166}
-.response{color:#d7def3;margin-top:5px}
-.footer{
-    margin-top:auto;
-    padding-top:32px;
-    text-align:center;
-    color:#9da7c4;
-    font-size:14px;
+
+button:disabled {
+    opacity: .6;
 }
-.footer strong{
-    color:#00e5ff;
-    text-shadow:0 0 10px rgba(0,229,255,.65);
+
+#result {
+    margin-top: 20px;
+    padding: 14px;
+    border-radius: 10px;
+    background: #303b47;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
-.footer-note{margin-top:7px;color:#6f7997;font-size:11px}
-@media(max-height:650px){body{align-items:flex-start}.card{margin-top:10px}}
+
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #888;
+    font-size: 13px;
+}
 </style>
 </head>
 
 <body>
-<main class="card">
-    <header class="header">
-        <h1>🔥 FREE FIRE LIKE</h1>
-        <p>Enter UID and send likes</p>
-    </header>
 
-    <section class="group">
-        <label for="uid">🔍 Search / UID</label>
-        <input
-            id="uid"
-            type="text"
-            inputmode="numeric"
-            autocomplete="off"
-            maxlength="20"
-            placeholder="Enter Free Fire UID"
-            aria-label="Free Fire UID"
-        >
-    </section>
+<div class="card">
 
-    <section class="group">
-        <label for="server">🌍 Server</label>
-        <select id="server" aria-label="Server">
-            <option value="ind">India (IND)</option>
-            <option value="bd">Bangladesh (BD)</option>
-            <option value="pk">Pakistan (PK)</option>
-            <option value="sg">Singapore (SG)</option>
-            <option value="br">Brazil (BR)</option>
-            <option value="us">USA (US)</option>
-        </select>
-    </section>
+    <h1>FREE FIRE LIKE</h1>
+    <div class="subtitle">Enter UID and send likes</div>
 
-    <button id="likeButton" type="button">❤️ SEND LIKE</button>
+    <label>🔍 Search / UID</label>
+    <input
+        id="uid"
+        type="text"
+        inputmode="numeric"
+        placeholder="Enter Free Fire UID"
+        autocomplete="off"
+    >
 
-    <div id="result" role="status" aria-live="polite">
-        Enter UID and select server.
+    <label>🌍 Server</label>
+    <select id="server">
+        <option value="ind">India (IND)</option>
+        <option value="bd">Bangladesh (BD)</option>
+    </select>
+
+    <button id="sendBtn" onclick="sendLike()">
+        ❤️ SEND LIKE
+    </button>
+
+    <div id="result">Enter UID and press SEND LIKE.</div>
+
+    <div class="footer">
+        Powered by Adarsh Shukla
     </div>
 
-    <footer class="footer">
-        ⚡ Powered by <strong>Adarsh Shukla</strong> ⚡
-        <div class="footer-note">Server response is shown as returned by the API.</div>
-    </footer>
-</main>
+</div>
 
 <script>
-const uidInput = document.getElementById("uid");
-const serverInput = document.getElementById("server");
-const button = document.getElementById("likeButton");
-const result = document.getElementById("result");
-
-function escapeHtml(value) {
-    return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-function formatResponse(data) {
-    const rows = [];
-
-    if (data.nickname != null)
-        rows.push("👤 Name: " + escapeHtml(data.nickname));
-
-    if (data.name != null && data.nickname == null)
-        rows.push("👤 Name: " + escapeHtml(data.name));
-
-    if (data.uid != null)
-        rows.push("🆔 UID: " + escapeHtml(data.uid));
-
-    if (data.likes_before != null)
-        rows.push("❤️ Likes Before: " + escapeHtml(data.likes_before));
-
-    if (data.likes_after != null)
-        rows.push("❤️ Likes After: " + escapeHtml(data.likes_after));
-
-    if (data.likes_added != null)
-        rows.push("➕ Likes Added: " + escapeHtml(data.likes_added));
-
-    return rows.length
-        ? rows.join("<br>")
-        : escapeHtml(JSON.stringify(data));
-}
-
 async function sendLike() {
-    const uid = uidInput.value.trim();
-    const server = serverInput.value;
 
-    if (!uid) {
-        result.innerHTML = '<span class="error">❌ Please enter a Free Fire UID.</span>';
-        uidInput.focus();
-        return;
-    }
+    const uid = document.getElementById("uid").value.trim();
+    const server = document.getElementById("server").value;
+    const result = document.getElementById("result");
+    const button = document.getElementById("sendBtn");
 
-    if (!/^\d+$/.test(uid)) {
-        result.innerHTML = '<span class="error">❌ UID must contain numbers only.</span>';
-        uidInput.focus();
+    if (!/^[0-9]+$/.test(uid)) {
+        result.textContent = "❌ Please enter a valid numeric UID.";
         return;
     }
 
     button.disabled = true;
     button.textContent = "⏳ Sending...";
-    result.innerHTML = '<span class="loading">⏳ Connecting to server...</span>';
+    result.textContent = "Connecting to API...";
 
     try {
-        const params = new URLSearchParams({
-            uid: uid,
-            server_name: server
-        });
 
-        const response = await fetch("/api/like?" + params.toString(), {
+        const url =
+            "/api/like?uid=" +
+            encodeURIComponent(uid) +
+            "&server_name=" +
+            encodeURIComponent(server);
+
+        const response = await fetch(url, {
             method: "GET",
-            headers: {"Accept": "application/json"},
             cache: "no-store"
         });
 
-        const text = await response.text();
+        const data = await response.json();
 
-        let data;
-        try {
-            data = JSON.parse(text);
-        } catch {
-            throw new Error("Invalid server response");
-        }
+        console.log("API RESPONSE:", data);
 
-        if (
-            data.status === 1 ||
-            data.status === "1" ||
-            data.success === true
-        ) {
-            result.innerHTML =
-                '<span class="success">✅ Request successful!</span>' +
-                '<div class="response">' +
-                formatResponse(data) +
-                '</div>';
+        if (data.status === 1) {
+
+            result.textContent =
+                "✅ Like sent successfully!\n\n" +
+                "Player: " + (data.PlayerNickname || "Unknown") + "\n" +
+                "UID: " + (data.UID || uid) + "\n" +
+                "Likes Before: " + (data.LikesbeforeCommand ?? "N/A") + "\n" +
+                "Likes After: " + (data.LikesafterCommand ?? "N/A") + "\n" +
+                "Likes Given: " + (data.LikesGivenByAPI ?? "N/A");
+
         } else {
-            result.innerHTML =
-                '<span class="error">❌ ' +
-                escapeHtml(data.error || data.message || "Request failed.") +
-                '</span>';
+
+            result.textContent =
+                "❌ " + (data.error || "API rejected this UID/server.");
         }
+
     } catch (error) {
+
         console.error(error);
-        result.innerHTML =
-            '<span class="error">❌ Server connection failed.<br>' +
-            'Please try again.</span>';
-    } finally {
-        button.disabled = false;
-        button.textContent = "❤️ SEND LIKE";
+
+        result.textContent =
+            "❌ Unable to connect to your backend.";
     }
+
+    button.disabled = false;
+    button.textContent = "❤️ SEND LIKE";
 }
-
-button.addEventListener("click", sendLike);
-
-uidInput.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") sendLike();
-});
 </script>
+
 </body>
 </html>
