@@ -18,6 +18,32 @@ def home():
 
 
 @app.route("/health")
+@app.route("/api/test")
+def api_test():
+    uid = "18444886384"
+    server = "ind"
+
+    try:
+        r = requests.get(
+            UPSTREAM_API,
+            params={
+                "uid": uid,
+                "server_name": server
+            },
+            timeout=30
+        )
+
+        return jsonify({
+            "sent_uid": uid,
+            "sent_server": server,
+            "api_status_code": r.status_code,
+            "api_response": r.json()
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": str(e)
+        }), 500
 def health():
     return jsonify({
         "status": 1,
