@@ -5,8 +5,10 @@ app = Flask(__name__)
 
 UPSTREAM_API = "https://free-fire-ob55-like-api.vercel.app/like"
 
+# इस API के अनुसार केवल India और Bangladesh
 ALLOWED_SERVERS = {
-    "IND", "BD", "PK", "SG", "BR", "US"
+    "ind",
+    "bd"
 }
 
 
@@ -19,14 +21,15 @@ def home():
 def health():
     return jsonify({
         "status": 1,
-        "message": "Proxy is working"
+        "message": "Server is working"
     })
 
 
 @app.route("/api/like")
-def like():
+def like_proxy():
+
     uid = request.args.get("uid", "").strip()
-    server = request.args.get("server_name", "IND").strip().upper()
+    server = request.args.get("server_name", "ind").strip().lower()
 
     # UID validation
     if not uid:
@@ -41,20 +44,21 @@ def like():
             "error": "UID must contain numbers only"
         }), 400
 
-    if not 5 <= len(uid) <= 20:
+    if len(uid) < 5 or len(uid) > 20:
         return jsonify({
             "status": 0,
-            "error": "Invalid UID length"
+            "error": "Invalid UID"
         }), 400
 
     # Server validation
     if server not in ALLOWED_SERVERS:
         return jsonify({
             "status": 0,
-            "error": "Invalid server"
+            "error": "Only India (IND) and Bangladesh (BD) servers are supported"
         }), 400
 
     try:
+
         response = requests.get(
             UPSTREAM_API,
             params={
@@ -66,34 +70,39 @@ def like():
 
         try:
             data = response.json()
+
         except ValueError:
-            data = {
+            return jsonify({
                 "status": 0,
                 "error": "API returned invalid JSON",
-                "response": response.text[:500]
-            }
+                "raw": response.text[:500]
+            }), 502
 
         return jsonify(data), response.status_code
 
     except requests.exceptions.Timeout:
+
         return jsonify({
             "status": 0,
-            "error": "API timeout"
+            "error": "API request timed out"
         }), 504
 
     except requests.exceptions.ConnectionError:
+
         return jsonify({
             "status": 0,
-            "error": "Could not connect to API"
+            "error": "Unable to connect to API"
         }), 502
 
-    except requests.exceptions.RequestException as e:
+    except requests.exceptions.RequestException:
+
         return jsonify({
             "status": 0,
             "error": "API request failed"
         }), 502
 
     except Exception:
+
         return jsonify({
             "status": 0,
             "error": "Internal server error"
