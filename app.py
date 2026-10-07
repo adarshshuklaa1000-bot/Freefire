@@ -5,8 +5,10 @@ app = Flask(__name__)
 
 UPSTREAM_API = "https://free-fire-ob55-like-api.vercel.app/like"
 
-# Keep the public UI and backend in sync.
-ALLOWED_SERVERS = {"ind", "bd", "pk", "sg", "br", "us"}
+# API में region uppercase में भेजेंगे
+ALLOWED_SERVERS = {
+    "IND", "BD", "PK", "SG", "BR", "US"
+}
 
 
 @app.get("/")
@@ -16,14 +18,19 @@ def home():
 
 @app.get("/health")
 def health():
-    return jsonify({"ok": True})
+    return jsonify({
+        "ok": True,
+        "message": "Server is running"
+    })
 
 
 @app.get("/api/like")
 def like_proxy():
-    uid = request.args.get("uid", "").strip()
-    server = request.args.get("server_name", "ind").strip().lower()
 
+    uid = request.args.get("uid", "").strip()
+    server = request.args.get("server_name", "IND").strip().upper()
+
+    # UID check
     if not uid:
         return jsonify({
             "status": 0,
@@ -36,13 +43,13 @@ def like_proxy():
             "error": "UID must contain numbers only"
         }), 400
 
-    # Prevent accidental very large input.
-    if len(uid) > 20:
+    if len(uid) < 5 or len(uid) > 20:
         return jsonify({
             "status": 0,
             "error": "Invalid UID"
         }), 400
 
+    # Server check
     if server not in ALLOWED_SERVERS:
         return jsonify({
             "status": 0,
@@ -50,7 +57,8 @@ def like_proxy():
         }), 400
 
     try:
-        upstream = requests.get(
+        # Upstream API
+        response = requests.get(
             UPSTREAM_API,
             params={
                 "uid": uid,
@@ -59,44 +67,28 @@ def like_proxy():
             timeout=30
         )
 
-        content_type = upstream.headers.get("content-type", "").lower()
+        # JSON response
+        try:
+            data = response.json()
+        except ValueError:
+            return jsonify({
+                "status": 0,
+                "error": "API returned an invalid response",
+                "raw": response.text[:500]
+            }), 502
 
-        if "application/json" in content_type:
-            try:
-                data = upstream.json()
-            except ValueError:
-                data = {
-                    "status": 0,
-                    "error": "Upstream returned invalid JSON"
-                }
-        else:
-            # Some APIs return JSON without a JSON content-type.
-            try:
-                data = upstream.json()
-            except ValueError:
-                data = {
-                    "status": 0,
-                    "error": "Upstream returned an unexpected response"
-                }
-
-        # Preserve the upstream HTTP status when useful, but never leak
-        # server-side exception details.
-        status_code = upstream.status_code
-        if status_code < 200 or status_code >= 600:
-            status_code = 502
-
-        return jsonify(data), status_code
+        return jsonify(data), response.status_code
 
     except requests.Timeout:
         return jsonify({
             "status": 0,
-            "error": "Upstream API timed out. Please try again."
+            "error": "API request timed out. Please try again."
         }), 504
 
-    except requests.RequestException:
+    except requests.RequestException as e:
         return jsonify({
             "status": 0,
-            "error": "Unable to connect to the upstream API."
+            "error": "Unable to connect to API."
         }), 502
 
     except Exception:
@@ -107,4 +99,7 @@ def like_proxy():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=5000
+    )
