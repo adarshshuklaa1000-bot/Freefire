@@ -3,7 +3,10 @@ import requests
 
 app = Flask(__name__)
 
-API_URL = "https://free-fire-ob55-like-api.vercel.app/like"
+# NEW API
+UPSTREAM_API = "https://rishant-69.vercel.app/like"
+
+ALLOWED_SERVERS = {"ind", "bd"}
 
 
 @app.route("/")
@@ -20,38 +23,36 @@ def health():
 
 
 @app.route("/api/like", methods=["GET"])
-def like():
-
+def like_proxy():
     uid = request.args.get("uid", "").strip()
     server = request.args.get("server_name", "ind").strip().lower()
 
     if not uid:
         return jsonify({
             "status": 0,
-            "error": "UID is required"
-        })
+            "error": "Please enter UID"
+        }), 400
 
-    if not uid.isdigit():
+    if not uid.isdigit() or not 5 <= len(uid) <= 20:
         return jsonify({
             "status": 0,
-            "error": "UID must contain numbers only"
-        })
+            "error": "Invalid UID format"
+        }), 400
 
-    if server not in ["ind", "bd"]:
+    if server not in ALLOWED_SERVERS:
         return jsonify({
             "status": 0,
-            "error": "Only India and Bangladesh servers are supported"
-        })
+            "error": "Only India and Bangladesh are supported"
+        }), 400
 
     try:
-        # EXACT API FORMAT FROM YOUR SCREENSHOT
         response = requests.get(
-            API_URL,
+            UPSTREAM_API,
             params={
                 "uid": uid,
                 "server_name": server
             },
-            timeout=30
+            timeout=25
         )
 
         try:
@@ -59,36 +60,27 @@ def like():
         except ValueError:
             return jsonify({
                 "status": 0,
-                "error": "API returned invalid JSON",
-                "raw_response": response.text[:1000]
-            })
+                "error": "API returned a non-JSON response",
+                "upstream_status": response.status_code,
+                "response": response.text[:500]
+            }), 502
 
-        # API ka original JSON response directly return karo
+        # Preserve the upstream API's actual result.
         return jsonify(data), response.status_code
 
-    except requests.exceptions.Timeout:
+    except requests.Timeout:
         return jsonify({
             "status": 0,
-            "error": "API request timed out"
+            "error": "Upstream API timed out"
         }), 504
 
-    except requests.exceptions.RequestException as e:
+    except requests.RequestException:
         return jsonify({
             "status": 0,
-            "error": "Unable to connect to API",
-            "details": str(e)
+            "error": "Could not connect to upstream API"
         }), 502
-
-    except Exception as e:
-        return jsonify({
-            "status": 0,
-            "error": "Server error",
-            "details": str(e)
-        }), 500
 
 
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=5000
-    )
+    app.run(host="0.0.0.0", port=5000)
+
